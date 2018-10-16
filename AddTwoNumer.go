@@ -12,13 +12,47 @@ type ListNode struct {
 }
 
 func main() {
-	sum := addTwoNumbers(toList(342), toList(465))
+	sum := addTwoNumbers(toList(19999999), toList(11))
 	fmt.Println(toInt(sum))
 }
 
 func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
-	sum := toInt(l1) + toInt(l2)
-	return toList(sum)
+	var first *ListNode
+	var prev *ListNode
+	carry := 0
+	for {
+		sum := getVale(l1) + getVale(l2) + carry
+		node := &ListNode{Val: sum % 10}
+		if first == nil {
+			first = node
+			prev = first
+		} else {
+			prev.Next = node
+			prev = prev.Next
+		}
+		carry = sum/10
+		if l1 != nil {
+			l1 = l1.Next
+		}
+		if l2 != nil {
+			l2 = l2.Next
+		}
+		if l1 == nil && l2 == nil {
+			if carry > 0 {
+				node := &ListNode{Val: carry}
+				prev.Next = node
+			}
+			break
+		}
+	}
+	return first
+}
+
+func getVale(l *ListNode) int {
+	if l == nil {
+		return 0
+	}
+	return l.Val
 }
 
 func toInt(l *ListNode) int {
